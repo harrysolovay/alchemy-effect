@@ -134,6 +134,12 @@ export const CommandProvider = () =>
           if (!output) {
             return undefined;
           }
+          const outputPath = getOutputPath(news);
+          const outputExists = yield* fs.exists(outputPath);
+          if (!outputExists) {
+            return { action: "update" as const };
+          }
+
           const newHash = yield* hashDirectory(news);
           if (newHash !== output.hash) {
             return { action: "update" as const };
